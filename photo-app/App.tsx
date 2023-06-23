@@ -21,14 +21,13 @@ import EmojiList from "./components/EmojiList";
 import EmojiSticker from "./components/EmojiSticker";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
+import domtoimage from "dom-to-image";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 
 export default function App() {
   const imageRef = useRef<any>();
-  const [status, requestPermission] = MediaLibrary.usePermissions({
-    writeOnly: true,
-  });
+  const [status, requestPermission] = MediaLibrary.usePermissions();
   const [pickedEmoji, setPickedEmoji] = useState<ImageSourcePropType | null>(
     null
   );
@@ -60,12 +59,27 @@ export default function App() {
   const onReset = () => setShowAppOptions(false);
   const onAddSticker = () => setIsModalVisible(true);
   const onSaveImage = async () => {
-    if (Platform.OS === "web") {
-      alert("saving is not supported on the web");
-    }
     try {
-      const localUri = await captureRef(imageRef, { height: 440, quality: 1 });
-      await MediaLibrary.saveToLibraryAsync(localUri);
+      if (Platform.OS === "web") {
+        const dataUrl = await domtoimage.toJpeg(imageRef.current, {
+          quality: 0.95,
+          width: 320,
+          height: 440,
+        });
+        const link = document.createElement("a");
+        link.download = "sticker-smash.jpeg";
+        link.href = dataUrl;
+        link.click();
+      } else {
+        const localUri = await captureRef(imageRef, {
+          height: 440,
+          quality: 1,
+        });
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        if (localUri) {
+          alert("Saved image");
+        }
+      }
     } catch (e) {
       console.error(e);
     }
