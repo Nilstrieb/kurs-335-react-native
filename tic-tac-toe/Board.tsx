@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 
 type SquareState = "O" | "X" | " ";
 type BoardState = "O" | "X" | "draw" | "ongoing";
@@ -67,8 +67,9 @@ const Board = () => {
       return;
     }
     setGameState({ state: "end", winner: winner });
-    alert(winner);
-    reset();
+    Alert.alert("Result", winner, [{ text: "OK", onPress: reset }], {
+      cancelable: false,
+    });
   };
 
   return (
