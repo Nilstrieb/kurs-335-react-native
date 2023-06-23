@@ -43,6 +43,12 @@ const Board = () => {
   const [xPlaying, setXPlaying] = useState(true);
   const [gameState, setGameState] = useState<GameState>({ state: "playing" });
 
+  const reset = () => {
+    setSquares(Array(9).fill(" "));
+    setXPlaying(true);
+    setGameState({ state: "playing" });
+  };
+
   const handleClick = (field: number) => {
     if (gameState.state !== "playing") {
       return;
@@ -62,6 +68,7 @@ const Board = () => {
     }
     setGameState({ state: "end", winner: winner });
     alert(winner);
+    reset();
   };
 
   return (
@@ -85,13 +92,7 @@ const Board = () => {
       </View>
 
       <View>
-        <Pressable
-          onPress={() => {
-            setSquares(Array(9).fill(" "));
-            setXPlaying(true);
-            setGameState({ state: "playing" });
-          }}
-        >
+        <Pressable onPress={reset}>
           <Text style={styles.reset}>reset</Text>
         </Pressable>
       </View>
