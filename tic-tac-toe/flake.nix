@@ -1,45 +1,57 @@
 {
-  description = "tic-tac-toe";
+  description = "My Android project";
 
-  # Flake inputs
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs"; 
-    android-nixpkgs = {
-      url = "github:tadfisher/android-nixpkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    devshell.url = "github:numtide/devshell";
+    flake-utils.url = "github:numtide/flake-utils";
+    android.url = "github:tadfisher/android-nixpkgs";
   };
 
-  outputs = { self, nixpkgs, android-nixpkgs }:
-    let
-      allSystems = [
-        "x86_64-linux" # 64-bit Intel/AMD Linux
-        "aarch64-linux" # 64-bit ARM Linux
-        "x86_64-darwin" # 64-bit Intel macOS
-        "aarch64-darwin" # 64-bit ARM macOS
-      ];
-
-      forAllSystems = f: nixpkgs.lib.genAttrs allSystems (system: f {
-        pkgs = import nixpkgs { inherit system; };
-      });
-    in
+  outputs = { self, nixpkgs, devshell, flake-utils, android }:
     {
-      packages = forAllSystems ({pkgs} : {
-        android-sdk = android-nixpkgs.sdk (sdkPkgs: with sdkPkgs; [
-          cmdline-tools-latest
-          build-tools-32-0-0
-          platform-tools
-          platforms-android-31
-          emulator
-        ]);
-      });
-      devShells = forAllSystems ({ pkgs }: {
-        default = pkgs.mkShell {
-          packages = with pkgs; [
-            nodejs-18_x # Node.js 18, plus npm, npx, and corepack
-            gradle # For the android build
+      overlay = final: prev: {
+        inherit (self.packages.${final.system}) android-sdk android-studio;
+      };
+    }
+    //
+    flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = [
+            devshell.overlays.default
+            self.overlay
           ];
         };
-      });
-    };
+      in
+      {
+        packages = {
+          android-sdk = android.sdk.${system} (sdkPkgs: with sdkPkgs; [
+            # Useful packages for building and testing.
+            build-tools-30-0-3
+            tools
+            cmdline-tools-latest
+            emulator
+            platform-tools
+            platforms-android-33
+            ndk-23-1-7779620
+            patcher-v4
+
+            # Other useful packages for a development environment.
+            # sources-android-30
+            # system-images-android-30-google-apis-x86
+            # system-images-android-30-google-apis-playstore-x86
+          ]);
+
+          android-studio = pkgs.androidStudioPackages.stable;
+          # android-studio = pkgs.androidStudioPackages.beta;
+          # android-studio = pkgs.androidStudioPackages.preview;
+          # android-studio = pkgs.androidStudioPackage.canary;
+        };
+
+        devShell = import ./devshell.nix { inherit pkgs; };
+      }
+    );
 }
