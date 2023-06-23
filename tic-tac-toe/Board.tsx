@@ -87,7 +87,7 @@ const Board = () => {
       <View>
         <Pressable
           onPress={() => {
-            setSquares(Array(9).fill("-"));
+            setSquares(Array(9).fill(" "));
             setXPlaying(true);
             setGameState({ state: "playing" });
           }}
