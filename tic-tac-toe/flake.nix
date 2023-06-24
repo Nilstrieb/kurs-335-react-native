@@ -38,6 +38,7 @@
             platforms-android-33
             ndk-23-1-7779620
             patcher-v4
+            cmake-3-22-1
 
             # Other useful packages for a development environment.
             # sources-android-30

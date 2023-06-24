@@ -31,5 +31,7 @@ devshell.mkShell {
     jdk11
     ninja
     cmake
+    nodejs_20
+    yarn
   ];
 }
