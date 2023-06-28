@@ -1,12 +1,11 @@
-import { Stack, useSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import {useMaxEntities} from "../../../components/MaxEntities";
+import {Stack, useSearchParams} from "expo-router";
+import {useEffect, useState} from "react";
+import {StyleSheet, Text, View} from "react-native";
 
 const CatDetails = () => {
     const [cat, setCat] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const { id } = useSearchParams();
+    const {id} = useSearchParams();
 
     useEffect(() => {
         fetch(`https://api.thecatapi.com/v1/breeds/${id}`)
