@@ -2,6 +2,8 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import data from "./data.json";
 
+data.sort((a, b) => a.birthdayyear - b.birthdayyear);
+
 const PersonList = () => {
   return (
     <View style={styles.outer}>
