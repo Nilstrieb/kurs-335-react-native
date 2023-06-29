@@ -1,4 +1,4 @@
-import { base_url } from "./consts";
+import { baseurl } from "./consts";
 
 export type RegisterResponse = {
   token: string;
@@ -8,7 +8,7 @@ export async function register(
   username: string,
   password: string
 ): Promise<RegisterResponse | "username-exists-already"> {
-  const res = await fetch(`${base_url()}/auth/register`, {
+  const res = await fetch(`${baseurl()}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
       username,
@@ -31,7 +31,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<RegisterResponse | null> {
-  const res = await fetch(`${base_url()}/auth/login`, {
+  const res = await fetch(`${baseurl()}/auth/login`, {
     method: "POST",
     body: JSON.stringify({
       username,
