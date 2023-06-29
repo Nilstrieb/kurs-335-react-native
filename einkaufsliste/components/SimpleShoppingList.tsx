@@ -83,6 +83,12 @@ const SimpleShoppingList = ({ listId, joinedList }: Props) => {
           </View>
         )}
       />
+      <View style={[styles.productBox, styles.addItemBox]}>
+        <TouchableOpacity style={styles.addItemTextBox}>
+          <Text>Add item</Text>
+        </TouchableOpacity>
+        <View style={styles.productIconBox}></View>
+      </View>
     </View>
   );
 };
@@ -103,6 +109,17 @@ const styles = StyleSheet.create({
     margin: 10,
     borderColor: "grey",
     borderBottomWidth: 1,
+    paddingBottom: 3,
+  },
+  addItemBox: {
+    borderBottomWidth: 0,
+    flexDirection: "row-reverse",
+  },
+  addItemTextBox: {
+    right: 0,
+    backgroundColor: "lightblue",
+    padding: 3,
+    borderRadius: 3,
   },
   productIconBox: {
     flex: 1,
