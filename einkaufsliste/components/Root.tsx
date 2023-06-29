@@ -41,7 +41,10 @@ const Root = () => {
             <FlatList
               data={lists}
               renderItem={(list) => (
-                <SimpleShoppingList listId={list.item.id} />
+                <SimpleShoppingList
+                  listId={list.item.id}
+                  joinedList={list.item}
+                />
               )}
             />
           </View>

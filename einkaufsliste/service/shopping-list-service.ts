@@ -37,6 +37,8 @@ export type UserCreateRes = {
   token: string;
 };
 
+const esc = encodeURIComponent;
+
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${baseurl()}${path}`, options);
   if (!res.ok) {
@@ -64,9 +66,7 @@ async function fetchApiAuth<T>(
 }
 
 export async function getList(id: string): Promise<ShoppingList | null> {
-  const res = await fetch(
-    `${baseurl()}/shopping-list/${encodeURIComponent(id)}`
-  );
+  const res = await fetch(`${baseurl()}/shopping-list/${esc(id)}`);
   if (res.status === 404) {
     return null;
   }
@@ -92,7 +92,7 @@ export async function createList(name: string): Promise<ListCreateRes> {
 
 export async function joinList(id: string): Promise<UserCreateRes> {
   const user: User = { id: "", name: "hans" };
-  return fetchApi(`/shopping-list/${encodeURIComponent(id)}`, {
+  return fetchApi(`/shopping-list/${esc(id)}`, {
     method: "POST",
     body: JSON.stringify(user),
     headers: {
@@ -105,7 +105,7 @@ export async function addProduct(
   id: string,
   product: Product
 ): Promise<ShoppingList> {
-  return fetchApi(`/shopping-list/${encodeURIComponent(id)}/products`, {
+  return fetchApi(`/shopping-list/${esc(id)}/products`, {
     method: "POST",
     body: JSON.stringify(product),
     headers: {
@@ -120,9 +120,7 @@ export async function editProduct(
 ): Promise<ShoppingList> {
   return fetchApiAuth(
     list.token,
-    `/shopping-list/${encodeURIComponent(
-      list.id
-    )}/products/${encodeURIComponent(product.id)}`,
+    `/shopping-list/${esc(list.id)}/products/${esc(product.id)}`,
     {
       method: "PUT",
       body: JSON.stringify(product),
@@ -135,14 +133,9 @@ export async function editProduct(
 
 export async function deleteProduct(
   id: string,
-  product: string
+  productId: string
 ): Promise<ShoppingList> {
-  return fetchApi(
-    `/shopping-list/${encodeURIComponent(id)}/products/${encodeURIComponent(
-      product
-    )}`,
-    {
-      method: "DELETE",
-    }
-  );
+  return fetchApi(`/shopping-list/${esc(id)}/products/${esc(productId)}`, {
+    method: "DELETE",
+  });
 }
