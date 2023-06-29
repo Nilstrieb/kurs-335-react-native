@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import {
+  addProduct,
   deleteProduct,
   editProduct,
   getList,
@@ -17,12 +18,15 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { FontAwesome } from "@expo/vector-icons";
 
+export type AddProductCallback = (newProduct: Product) => void;
+
 type Props = {
   listId: string;
   joinedList: JoinedList;
+  onAddItem: (callback: AddProductCallback) => void;
 };
 
-const SimpleShoppingList = ({ listId, joinedList }: Props) => {
+const SimpleShoppingList = ({ listId, joinedList, onAddItem }: Props) => {
   const [list, setList] = useState<ShoppingList | null>(null);
 
   const refetch = useCallback(() => {
@@ -47,6 +51,11 @@ const SimpleShoppingList = ({ listId, joinedList }: Props) => {
       .then((list) => setList(list))
       .catch(console.error);
   };
+
+  const onProductAdded = (product: Product) =>
+    addProduct(listId, product)
+      .then((list) => setList(list))
+      .catch(console.error);
 
   if (!list) {
     return (
@@ -84,7 +93,10 @@ const SimpleShoppingList = ({ listId, joinedList }: Props) => {
         )}
       />
       <View style={[styles.productBox, styles.addItemBox]}>
-        <TouchableOpacity style={styles.addItemTextBox}>
+        <TouchableOpacity
+          style={styles.addItemTextBox}
+          onPress={() => onAddItem(onProductAdded)}
+        >
           <Text>Add item</Text>
         </TouchableOpacity>
         <View style={styles.productIconBox}></View>
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
   addItemTextBox: {
     right: 0,
     backgroundColor: "lightblue",
-    padding: 3,
+    padding: 5,
     borderRadius: 3,
   },
   productIconBox: {

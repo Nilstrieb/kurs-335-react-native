@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import useAsyncStorage from "../service/use-async-storage";
 
 type Context = {
   token: string | null;
@@ -21,7 +22,7 @@ export const AuthContextProvider = ({
 }: {
   children: JSX.Element | JSX.Element[];
 }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useAsyncStorage<string | null>("user-token", null);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>

@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
 import Login from "./Login";
 import { StatusBar } from "expo-status-bar";
 import { useToken } from "./auth-context";
 import useAsyncStorage from "../service/use-async-storage";
-import { JoinedList } from "../service/shopping-list-service";
-import SimpleShoppingList from "./SimpleShoppingList";
+import {
+  JoinedList,
+  Product,
+  ShoppingList,
+} from "../service/shopping-list-service";
+import SimpleShoppingList, { AddProductCallback } from "./SimpleShoppingList";
 import Header from "./header";
+import AddItemModal from "./AddItemModal";
 
 const Root = () => {
   const [loginModalVisible, setLoginModalVisible] = useState(true);
   const { token, setToken } = useToken();
+  const [isAddingItem, setIsAddingItem] = useState<null | {
+    callback: AddProductCallback;
+  }>(null);
+
   const [lists, setLists] = useAsyncStorage<JoinedList[]>("shopping-lists", [
     { id: "TEST1", token: "0097bbaf-3331-4c1d-8ba9-63db06949a54" },
     { id: "TEST2", token: "1097bbaf-3331-4c1d-8ba9-63db06949a54" },
@@ -37,17 +39,30 @@ const Root = () => {
       />
       <View style={styles.container}>
         {token ? (
-          <View>
-            <FlatList
-              data={lists}
-              renderItem={(list) => (
-                <SimpleShoppingList
-                  listId={list.item.id}
-                  joinedList={list.item}
-                />
-              )}
+          <>
+            <View>
+              <FlatList
+                data={lists}
+                renderItem={(list) => (
+                  <SimpleShoppingList
+                    listId={list.item.id}
+                    joinedList={list.item}
+                    onAddItem={(callback) => setIsAddingItem({ callback })}
+                  />
+                )}
+              />
+            </View>
+
+            <AddItemModal
+              visible={!!isAddingItem}
+              onClose={(list) => {
+                setIsAddingItem(null);
+                if (list && isAddingItem) {
+                  isAddingItem.callback(list);
+                }
+              }}
             />
-          </View>
+          </>
         ) : (
           <Login
             onClose={() => setLoginModalVisible(false)}
