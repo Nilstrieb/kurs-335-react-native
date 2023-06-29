@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Modal,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -29,7 +28,7 @@ const Login = ({ visible, onClose }: Props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const { setToken } = useToken();
+  const { setUser } = useToken();
   const onRegister = () => {
     setError(null);
     register(username, password)
@@ -37,7 +36,7 @@ const Login = ({ visible, onClose }: Props) => {
         if (res === "username-exists-already") {
           setError("Username already exists");
         } else {
-          setToken(res.token);
+          setUser({ token: res.token, username });
           onClose();
         }
       })
@@ -53,7 +52,7 @@ const Login = ({ visible, onClose }: Props) => {
         if (!res) {
           setError("Username or password incorrect");
         } else {
-          setToken(res.token);
+          setUser({ token: res.token, username });
           onClose();
         }
       })

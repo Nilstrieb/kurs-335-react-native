@@ -1,17 +1,22 @@
 import React, { useContext, useState } from "react";
 import useAsyncStorage from "../service/use-async-storage";
 
+type User = {
+  token: string;
+  username: string;
+};
+
 type Context = {
-  token: string | null;
-  setToken: (token: string | null) => void;
+  user: User | null;
+  setUser: (token: User | null) => void;
 };
 
 class EmptyDefault {
-  get token(): string {
-    throw new Error("Cannot get token of default value");
+  get user(): User {
+    throw new Error("Cannot get user of default value");
   }
-  setToken() {
-    throw new Error("Cannot set token of default value");
+  setUser() {
+    throw new Error("Cannot set user of default value");
   }
 }
 
@@ -22,10 +27,10 @@ export const AuthContextProvider = ({
 }: {
   children: JSX.Element | JSX.Element[];
 }) => {
-  const [token, setToken] = useAsyncStorage<string | null>("user-token", null);
+  const [user, setUser] = useAsyncStorage<User | null>("user-token", null);
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

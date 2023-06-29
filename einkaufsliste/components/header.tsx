@@ -3,17 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
-  loggedIn: boolean;
+  username: string | undefined;
   onUserClick: () => void;
 };
 
-const Header = ({ loggedIn, onUserClick }: Props) => {
+const Header = ({ username, onUserClick }: Props) => {
   return (
     <View style={styles.box}>
       <Text>einkaufsliste</Text>
+      <Text>{username}</Text>
       <TouchableOpacity onPress={onUserClick}>
         <AntDesign
-          name={loggedIn ? "deleteuser" : "adduser"}
+          name={username !== undefined ? "deleteuser" : "adduser"}
           size={24}
           color="black"
         />

@@ -4,18 +4,14 @@ import Login from "./Login";
 import { StatusBar } from "expo-status-bar";
 import { useToken } from "./auth-context";
 import useAsyncStorage from "../service/use-async-storage";
-import {
-  JoinedList,
-  Product,
-  ShoppingList,
-} from "../service/shopping-list-service";
+import { JoinedList } from "../service/shopping-list-service";
 import SimpleShoppingList, { AddProductCallback } from "./SimpleShoppingList";
 import Header from "./header";
 import AddItemModal from "./AddItemModal";
 
 const Root = () => {
   const [loginModalVisible, setLoginModalVisible] = useState(true);
-  const { token, setToken } = useToken();
+  const { user, setUser } = useToken();
   const [isAddingItem, setIsAddingItem] = useState<null | {
     callback: AddProductCallback;
   }>(null);
@@ -28,17 +24,17 @@ const Root = () => {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <Header
-        loggedIn={!!token}
+        username={user?.username}
         onUserClick={() => {
-          if (token) {
-            setToken(null);
+          if (user) {
+            setUser(null);
           } else {
             setLoginModalVisible(true);
           }
         }}
       />
       <View style={styles.container}>
-        {token ? (
+        {user ? (
           <>
             <View>
               <FlatList
