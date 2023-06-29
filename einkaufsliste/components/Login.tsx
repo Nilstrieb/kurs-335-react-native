@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { useToken } from "./auth-context";
@@ -17,9 +18,9 @@ type Props = {
 
 const Button = ({ title, onPress }: { title: string; onPress: () => void }) => {
   return (
-    <Pressable onPress={onPress} style={styles.button}>
+    <TouchableOpacity onPress={onPress} style={styles.button}>
       <Text>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

@@ -25,7 +25,7 @@ const SimpleShoppingList = ({ listId }: Props) => {
 
   return (
     <View style={styles.box}>
-      <Text>{list.name}</Text>
+      <Text style={styles.listName}>{list.name}</Text>
       <FlatList
         data={list.products}
         renderItem={({ item }) => (
@@ -40,13 +40,16 @@ const SimpleShoppingList = ({ listId }: Props) => {
 
 const styles = StyleSheet.create({
   box: {
-    borderColor: "grey",
-    borderRadius: 2,
-    borderWidth: 1,
     padding: 5,
+  },
+  listName: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   productBox: {
     margin: 10,
+    borderColor: "grey",
+    borderBottomWidth: 1,
   },
 });
 

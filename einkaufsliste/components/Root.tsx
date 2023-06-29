@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Login from "./Login";
 import { StatusBar } from "expo-status-bar";
 import { useToken } from "./auth-context";
 import useAsyncStorage from "../service/use-async-storage";
 import { JoinedList } from "../service/shopping-list-service";
 import SimpleShoppingList from "./SimpleShoppingList";
+import Header from "./header";
 
 const Root = () => {
   const [loginModalVisible, setLoginModalVisible] = useState(true);
@@ -16,41 +24,50 @@ const Root = () => {
   ]);
 
   return (
-    <View style={styles.container}>
-      {token ? (
-        <View>
-          <Pressable onPress={() => setToken(null)}>
-            <Text>Logout</Text>
-          </Pressable>
-          <Text>congrats, you have a token: {token}</Text>
-          <FlatList
-            data={lists}
-            renderItem={(list) => <SimpleShoppingList listId={list.item.id} />}
-          />
-        </View>
-      ) : (
-        <>
-          <Pressable onPress={() => setLoginModalVisible(true)}>
-            <Text>login</Text>
-          </Pressable>
+    <SafeAreaView style={styles.outerContainer}>
+      <Header
+        loggedIn={!!token}
+        onUserClick={() => {
+          if (token) {
+            setToken(null);
+          } else {
+            setLoginModalVisible(true);
+          }
+        }}
+      />
+      <View style={styles.container}>
+        {token ? (
+          <View>
+            <FlatList
+              data={lists}
+              renderItem={(list) => (
+                <SimpleShoppingList listId={list.item.id} />
+              )}
+            />
+          </View>
+        ) : (
           <Login
             onClose={() => setLoginModalVisible(false)}
             visible={loginModalVisible}
           />
-        </>
-      )}
-      <StatusBar style="auto" />
-    </View>
+        )}
+        <StatusBar style="auto" />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    paddingTop: 50,
+    backgroundColor: "#fff",
+    height: "100%",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 50,
+    height: "100%",
   },
 });
 
