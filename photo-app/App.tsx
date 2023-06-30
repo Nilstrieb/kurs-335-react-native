@@ -1,11 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  ImageSourcePropType,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ImageSourcePropType, Platform, StyleSheet, View } from "react-native";
 import ImageViewer, {
   IMAGE_HEIGHT,
   IMAGE_WIDTH,
@@ -22,6 +16,7 @@ import EmojiSticker from "./components/EmojiSticker";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
 import domtoimage from "dom-to-image";
+import TakePhoto from "./components/TakePhoto";
 
 const PlaceholderImage = require("./assets/images/background-image.png");
 
@@ -36,6 +31,7 @@ export default function App() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   // This counter increases every time the emoji sticker should be reset
   const [emojiStickerResetCounter, setEmojiStickerResetCounter] = useState(0);
+  const [cameraShown, setCameraShown] = useState(false);
 
   if (status === null) {
     requestPermission();
@@ -115,6 +111,11 @@ export default function App() {
         <View style={styles.footerContainer}>
           <Button theme="primary" label="Choose a photo" onPress={pickImage} />
           <Button
+            theme="primary"
+            label="Take a photo"
+            onPress={() => setCameraShown(true)}
+          />
+          <Button
             label="Use this photo"
             onPress={() => setShowAppOptions(true)}
           />
@@ -129,6 +130,16 @@ export default function App() {
           onCloseModal={onModalClose}
         />
       </EmojiPicker>
+      <TakePhoto
+        onClose={(uri) => {
+          setCameraShown(false);
+          if (uri) {
+            setSelectedImage(uri);
+            setShowAppOptions(true);
+          }
+        }}
+        visible={cameraShown}
+      />
       <StatusBar style="auto" />
     </GestureHandlerRootView>
   );
