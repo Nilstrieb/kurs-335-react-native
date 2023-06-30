@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import StepCounter from "./parts/steps/StepCounter";
+import Magnets from "./parts/magnets/Magnets";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <StepCounter />
+      <Magnets />
     </View>
   );
 }
