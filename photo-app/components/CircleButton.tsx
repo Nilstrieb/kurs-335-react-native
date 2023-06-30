@@ -1,13 +1,13 @@
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const CircleButton = ({ onPress }: { onPress: () => void }) => {
   return (
     <View style={styles.circleButtonContainer}>
-      <Pressable style={styles.circleButton} onPress={onPress}>
+      <TouchableOpacity style={styles.circleButton} onPress={onPress}>
         <MaterialIcons name="add" size={38} color="#25292E" />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   circleButtonContainer: {
     width: 84,
     height: 84,
-    marginHorizontal: 60,
     borderWidth: 4,
     borderColor: "#FFD33D",
     borderRadius: 42,
