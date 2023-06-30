@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import StepCounter from "./parts/steps/StepCounter";
 
 export default function App() {
