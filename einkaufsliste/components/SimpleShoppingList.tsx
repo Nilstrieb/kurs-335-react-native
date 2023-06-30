@@ -17,6 +17,7 @@ import {
 } from "../service/shopping-list-service";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export type AddProductCallback = (newProduct: Product) => void;
 
@@ -24,9 +25,15 @@ type Props = {
   listId: string;
   joinedList: JoinedList;
   onAddItem: (callback: AddProductCallback) => void;
+  onRemoveList: () => void;
 };
 
-const SimpleShoppingList = ({ listId, joinedList, onAddItem }: Props) => {
+const SimpleShoppingList = ({
+  listId,
+  joinedList,
+  onAddItem,
+  onRemoveList,
+}: Props) => {
   const [list, setList] = useState<ShoppingList | null>(null);
 
   const refetch = useCallback(() => {
@@ -67,7 +74,12 @@ const SimpleShoppingList = ({ listId, joinedList, onAddItem }: Props) => {
 
   return (
     <View style={styles.box}>
-      <Text style={styles.listName}>{list.name}</Text>
+      <View style={styles.listTitleBox}>
+        <Text style={styles.listName}>{list.name}</Text>
+        <TouchableOpacity onPress={onRemoveList}>
+          <Ionicons name="exit-outline" size={24} color="red" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={list.products}
         renderItem={({ item }) => (
@@ -113,6 +125,11 @@ const styles = StyleSheet.create({
   listName: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  listTitleBox: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   productBox: {
     flex: 1,

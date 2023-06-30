@@ -44,6 +44,9 @@ const Root = () => {
                     listId={list.item.id}
                     joinedList={list.item}
                     onAddItem={(callback) => setIsAddingItem({ callback })}
+                    onRemoveList={() =>
+                      setLists(lists.filter((l) => l.id !== list.item.id))
+                    }
                   />
                 )}
               />
