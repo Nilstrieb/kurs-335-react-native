@@ -29,6 +29,7 @@ jobs:
         project:
           - tic-tac-toe
           - einkaufsliste
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
