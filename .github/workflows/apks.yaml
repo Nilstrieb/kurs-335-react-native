@@ -34,13 +34,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install Nix
-        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
       - name: Build apk
         run: |
-          nix develop -c "./build_project.sh ${{ matrix.project }}"
+          pwd
+          ./build_project.sh ${{ matrix.project }}
       - name: Upload Artifact
         uses: actions/upload-release-asset@v1
         env:
